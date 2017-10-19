@@ -1,0 +1,710 @@
+/*
+ * main.css
+ *
+ * Custom CSS Styling for Tugas 1 APAP
+ * Made by Kenny Reida Dharmawan
+ * SI Fasilkom UI 2015
+ * 1506757472, APAP - C
+ *
+ * All rights reserved.
+ *
+ */
+
+body {
+  font-family: 'Inter UI';
+  /* Padding for left sidebar navigation */
+  padding: 0 0 0 20rem;
+  background: #FEFEFE;
+  color: #333333;
+}
+
+a,
+a:hover,
+a:focus {
+  color: #333333;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.25;
+}
+
+input,
+input:hover,
+input:focus {
+  outline: none;
+  background: none;
+}
+
+button,
+button:hover,
+button:focus {
+  outline: none;
+  border: none;
+}
+
+label {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  color: #CCCCCC;
+  margin-bottom: 0.5rem;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  border: 0.1rem solid #21d4fd;
+}
+
+select:disabled {
+  background: #FAFAFA;
+  border: 0.1rem solid #FAFAFA;
+}
+
+/* Global Nav Styling */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 20rem;
+  height: 100vh;
+  padding: 2rem 0;
+  background: #FEFEFE;
+  border-right: 0.2rem solid #21d4fd;
+  -webkit-border-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) 1 100%;
+  -moz-border-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) 1 100%;
+  -o-border-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) 1 100%;
+  border-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+nav h1 {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  color: #FEFEFE;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+nav .links {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+nav .links a {
+  display: block;
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 0.2rem solid #EEEEEE;
+  transition: background 0.25s ease-in-out;
+}
+
+nav .links a:hover {
+  background: #FAFAFA;
+  transition: background 0.25s ease-in-out;
+}
+
+nav .links a span {
+  color: #21d4fd;
+  background: -webkit-linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+nav .links a.active {
+  background: #FAFAFA;
+  pointer-events: none;
+}
+
+nav .links a.partOf {
+  background: #FAFAFA;
+}
+
+nav h6 {
+  color: #AAAAAA;
+  font-weight: 400;
+  font-size: 0.5rem;
+  padding: 0 2rem;
+}
+
+nav h6 a {
+  color: #AAAAAA;
+  text-decoration: underline;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+}
+
+th {
+  border-bottom: 0.2rem solid #FEFEFE;
+}
+
+td {
+  border-bottom: 0.1rem solid #FEFEFE;
+}
+
+th,
+td {
+  padding: 1rem;
+}
+
+td a {
+  color: #FEFEFE;
+  padding: 0.5rem 1rem;
+  border: 0.1rem solid #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+td a:hover,
+td a:focus {
+  background: #FEFEFE;
+  color: #333;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.hidden {
+  display: none;
+}
+
+.content {
+  padding: 8rem 2rem 2rem;
+}
+
+.home {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+}
+
+.home h1 {
+  width: 100%;
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  color: #333333;
+  background: -webkit-linear-gradient(-20deg, #21d4fd 0%, #b721ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home h2 {
+  width: 100%;
+  font-size: 1.5rem;
+  color: #CCCCCC;
+}
+
+.home .inputAction {
+  width: calc(45% - 0.1rem);
+  padding: 2rem 0;
+}
+
+.home .inputAction h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.home .inputAction button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.home .inputAction button:hover {
+  cursor: pointer;
+}
+
+.home .divider {
+  width: 0.1rem;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.breadcrumbs {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.breadcrumbs h6 {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #AAAAAA;
+}
+
+.breadcrumbs h6 a {
+  color: #21d4fd;
+}
+
+.breadcrumbs h6 a.current {
+  color: #b721ff;
+  pointer-events: none;
+  cursor: default;
+}
+
+.breadcrumbs h6 a:hover {
+  text-decoration: underline;
+}
+
+.penduduk {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+}
+
+.penduduk h1 {
+  width: 100%;
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  color: #333333;
+  background: -webkit-linear-gradient(-20deg, #21d4fd 0%, #b721ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.penduduk h2 {
+  width: 100%;
+  font-size: 1.5rem;
+  color: #CCCCCC;
+  margin: 0;
+}
+
+.penduduk .inputAction {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.penduduk .inputAction h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.penduduk .inputAction .selectContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.penduduk .inputAction .selectContainer .selectItem {
+  width: calc((100% / 3) - 3rem);
+}
+
+.penduduk .inputAction.add input,
+.penduduk .inputAction.add select {
+  margin-bottom: 1rem;
+}
+
+.penduduk .inputAction button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradie-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.penduduk .inputAction button:hover {
+  cursor: pointer;
+}
+
+.penduduk .inputAction.nonaktif {
+  width: auto;
+  display: inline;
+  padding: 0;
+  margin: 0 2rem 2rem 0;
+}
+
+.penduduk .inputAction.nonaktif button {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  margin: 0;
+  height: 4rem;
+  border: 0.2rem solid #f77062;
+  background: none;
+  color: #f77062;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.penduduk .inputAction.nonaktif button:hover {
+  background: #f77062;
+  color: #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.penduduk .inputAction.nonaktif button:disabled {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  margin: 0;
+  height: 4rem;
+  border: 0.2rem solid #AAAAAA;
+  background: #AAAAAA;
+  color: #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+
+.penduduk .divider {
+  font-size: 2rem;
+  color: #21d4fd;
+  background: -webkit-linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.penduduk .biodata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+.penduduk .biodata h3,
+.penduduk .biodata h4 {
+  width: 100%;
+}
+
+.penduduk .biodata h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.penduduk .biodata h4 {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #AAAAAA;
+  margin-bottom: 0.5rem;
+}
+
+.penduduk .tambah,
+.penduduk .biodata a {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  margin: 0 2rem 2rem 0;
+  height: 4rem;
+}
+
+.penduduk .tambah span,
+.penduduk .biodata a span {
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-right: 0.5rem;
+}
+
+.penduduk .tambah,
+.penduduk .biodata .ubah {
+  border: 0.2rem solid #43e97b;
+  color: #43e97b;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.penduduk .tambah:hover,
+.penduduk .biodata .ubah:hover {
+  background: #43e97b;
+  color: #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.penduduk .biodata .linkTo {
+  border: 0.2rem solid #b721ff;
+  color: #b721ff;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.penduduk .biodata .linkTo:hover {
+  background: #b721ff;
+  color: #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.cari {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+}
+
+.cari h1 {
+  width: 100%;
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  color: #333333;
+  background: -webkit-linear-gradient(-20deg, #21d4fd 0%, #b721ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: capitalize;
+}
+
+.cari .inputAction {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.cari .inputAction h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cari .inputAction .selectContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.cari .inputAction .selectContainer .selectItem {
+  width: calc((100% / 3) - 3rem);
+}
+
+.cari .inputAction button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.cari .inputAction button:hover {
+  cursor: pointer;
+}
+
+.cari .inputAction button:disabled {
+  background: #AAAAAA;
+}
+
+.cari .divider {
+  font-size: 2rem;
+  color: #21d4fd;
+  background: -webkit-linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.keluarga {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+}
+
+.keluarga h1 {
+  width: 100%;
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  color: #333333;
+  background: -webkit-linear-gradient(-20deg, #21d4fd 0%, #b721ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.keluarga .inputAction {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.keluarga .inputAction h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.keluarga .inputAction.add input,
+.keluarga .inputAction.add select {
+  margin-bottom: 1rem;
+}
+
+.keluarga .inputAction button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.keluarga .inputAction button:hover {
+  cursor: pointer;
+}
+
+.keluarga .biodata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+.keluarga .biodata h3,
+.keluarga .biodata h4 {
+  width: 100%;
+}
+
+.keluarga .biodata h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.keluarga .biodata h4 {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #AAAAAA;
+  margin-bottom: 0.5rem;
+}
+
+.keluarga .tambah,
+.keluarga .biodata a {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FAFAFA;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  margin: 0 2rem 2rem 0;
+  height: 4rem;
+}
+
+.keluarga .tambah span,
+.keluarga .biodata a span {
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-right: 0.5rem;
+}
+
+.keluarga .tambah,
+.keluarga .biodata .ubah {
+  border: 0.2rem solid #43e97b;
+  color: #43e97b;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.keluarga .tambah:hover,
+.keluarga .biodata .ubah:hover {
+  background: #43e97b;
+  color: #FEFEFE;
+  transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+.keluarga .anggota {
+  width: calc(100% + 4rem);
+  margin: 0 -2rem;
+  color: #FEFEFE;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.keluarga .anggota h3 {
+  width: 100%;
+  padding: 0 2rem 1rem;
+  background: #FEFEFE;
+  color: #AAAAAA;
+  font-size: 1rem;
+}
+
+.keluarga .anggota table thead tr th:first-of-type,
+.keluarga .anggota table tbody tr td:first-of-type {
+  padding-left: 2rem;
+}
+
+.keluarga .anggota table thead tr th:last-of-type,
+.keluarga .anggota table tbody tr td:last-of-type {
+  padding-right: 2rem;
+}
