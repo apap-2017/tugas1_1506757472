@@ -18,17 +18,17 @@ public class KelurahanService {
 	private KelurahanMapper kelurahanMapper;
 	
 	public KelurahanModel selectKelurahanById (BigInteger id) {
-		log.info("Select Kelurahan with ID {}", id);
+		log.info("KelurahanService: Select Kelurahan with ID {}", id);
 		return kelurahanMapper.selectKelurahanById(id);
 	}
 	
 	public List<KelurahanModel> selectAllKelurahan () {
-		log.info("Select All Kelurahan");
+		log.info("KelurahanService: Select All Kelurahan");
 		return kelurahanMapper.selectAllKelurahan();
 	}
 	
 	public List<KelurahanModel> selectAllKelurahanByKecamatanId (BigInteger id_kecamatan) {
-		log.info("Select All Kelurahan from Kecamatan with ID {}", id_kecamatan);
+		log.info("KelurahanService: Select All Kelurahan from Kecamatan with ID {}", id_kecamatan);
 		return kelurahanMapper.selectAllKelurahanByKecamatanId(id_kecamatan);
 	}
 }

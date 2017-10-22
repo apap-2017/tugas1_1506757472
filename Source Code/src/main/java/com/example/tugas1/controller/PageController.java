@@ -1,7 +1,6 @@
 package com.example.tugas1.controller;
 
 import java.math.BigInteger;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +55,7 @@ public class PageController {
 
     @RequestMapping("/")
 	public String index () {
+    	log.info("Req: Index");
 		return "index";
 	}
 
@@ -65,43 +66,60 @@ public class PageController {
     ) {
     	if (nik != null) {
     		PendudukModel penduduk = pendudukService.selectPenduduk(nik);
-    		log.info("Penduduk {}", penduduk);
-    		model.addAttribute("penduduk", penduduk);
-    		
-    		KeluargaModel keluarga = keluargaService.selectKeluargaById(penduduk.getId_keluarga());
-    		model.addAttribute("keluarga", keluarga);
-    		
-    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(keluarga.getId_kelurahan());
-    		model.addAttribute("kelurahan", kelurahan);
-    		
-    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kelurahan.getId_kecamatan());
-    		model.addAttribute("kecamatan", kecamatan);
-    		
-    		KotaModel kota = kotaService.selectKotaById(kecamatan.getId_kota());
-    		model.addAttribute("kota", kota);
-    		
-    		return "penduduk-view";
-    	}
 
+    		if (penduduk != null) {
+        		log.info("Req: View Penduduk {}", penduduk.getId());
+	    		model.addAttribute("penduduk", penduduk);
+	    		
+	    		KeluargaModel keluarga = keluargaService.selectKeluargaById(penduduk.getId_keluarga());
+	    		model.addAttribute("keluarga", keluarga);
+	    		
+	    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(keluarga.getId_kelurahan());
+	    		model.addAttribute("kelurahan", kelurahan);
+	    		
+	    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kelurahan.getId_kecamatan());
+	    		model.addAttribute("kecamatan", kecamatan);
+	    		
+	    		KotaModel kota = kotaService.selectKotaById(kecamatan.getId_kota());
+	    		model.addAttribute("kota", kota);
+	    		
+	    		return "penduduk-view";
+    		}
+    		
+    		log.info("ERR! Penduduk Not Found");
+    		return "error/penduduk-not-found";
+    	}
+		
+		log.info("Req: Index Penduduk");
 		return "penduduk";
 	}
 
     @RequestMapping(value = "/penduduk/tambah", method = RequestMethod.GET)
 	public String tambahPenduduk () {
+    	log.info("Req: Tambah Penduduk");
 		return "penduduk-add";
 	}
 
     @RequestMapping(value = "/penduduk/tambah", method = RequestMethod.POST)
 	public String tambahPendudukSubmit (Model model, @Valid @ModelAttribute PendudukModel penduduk, BindingResult result) {
-    	log.info("request penduduk {}", penduduk);
+    	log.info("Req: POST Tambah Penduduk {}", penduduk);
     	
     	if (result.hasErrors()) {
-        	log.info("errornya {}", result.getAllErrors());
+    		List<ObjectError> resultErrors = result.getAllErrors();
+
+    		for (int i = 0; i < resultErrors.size(); i++) {
+    			model.addAttribute("error" + resultErrors.get(i).getCodes()[0].split("pendudukModel")[1].substring(1), resultErrors.get(i).getDefaultMessage());
+    		}
+    		
+    		log.info("ERR! POST Tambah Penduduk Fail, validation error");
+    		model.addAttribute("penduduk", penduduk);
     		return "penduduk-add";
     	}
     	
     	if (!penduduk.getTanggal_lahir().matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$")) {
-    		log.info("ini bodoh");
+    		log.info("ERR! POST Tambah Penduduk Fail, tanggal_lahir error");
+    		model.addAttribute("errortanggal_lahir", "Format Tanggal Lahir harus YYYY-MM-DD");
+    		model.addAttribute("penduduk", penduduk);
     		return "penduduk-add";
     	}
     	
@@ -134,9 +152,15 @@ public class PageController {
 		penduduk.setId(allCount.add(new BigInteger("1")));
 		
 		pendudukService.addPenduduk(penduduk);
+		
+		if (keluarga.getIs_tidak_berlaku() == 1) {
+			log.info("Keluarga {} is set to be active because there is new member", keluarga.getId());
+			keluargaService.setKeluargaActive(keluarga.getId());
+		}
 
 		model.addAttribute("penduduk", penduduk);
     	
+		log.info("SUC! POST Tambah Penduduk {} Success", penduduk.getId());
     	return "penduduk-add-success";
 	}
 
@@ -146,18 +170,34 @@ public class PageController {
     	
     	if (penduduk != null) {
     		model.addAttribute("penduduk", penduduk);
+    		log.info("Req: Ubah Penduduk");
     		return "penduduk-edit";
     	}
-    	
-    	model.addAttribute("nik", nik);
+
+		log.info("ERR! Penduduk Not Found");
 		return "penduduk-not-found";
 	}
 
 
     @RequestMapping(value = "/penduduk/ubah/{nik}", method = RequestMethod.POST)
-	public String ubahPendudukSubmit (Model model, @PathVariable(value = "nik") String nik, @Valid @ModelAttribute PendudukModel penduduk, BindingResult result) {
+	public String ubahPendudukSubmit (Model model, @PathVariable(value = "nik") String nik, @Valid @ModelAttribute PendudukModel penduduk, BindingResult result) {    	
+		log.info("Req: POST Ubah Penduduk {}", penduduk.getId());
 
     	if (result.hasErrors()) {
+    		log.info("ERR! POST Ubah Penduduk Failed, validation error");
+    		List<ObjectError> resultErrors = result.getAllErrors();
+
+    		for (int i = 0; i < resultErrors.size(); i++) {
+    			model.addAttribute("error" + resultErrors.get(i).getCodes()[0].split("pendudukModel")[1].substring(1), resultErrors.get(i).getDefaultMessage());
+    		}
+
+    		model.addAttribute("penduduk", penduduk);
+    		return "penduduk-edit";
+    	}
+    	
+    	if (!penduduk.getTanggal_lahir().matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$")) {
+    		log.info("ERR! POST Ubah Penduduk Failed, tanggal_lahir error");
+    		model.addAttribute("errortanggal_lahir", "Format Tanggal Lahir harus YYYY-MM-DD");
     		model.addAttribute("penduduk", penduduk);
     		return "penduduk-edit";
     	}
@@ -169,6 +209,7 @@ public class PageController {
     		penduduk.getId_keluarga().compareTo(original.getId_keluarga()) != 0 ||
     		penduduk.getJenis_kelamin() != original.getJenis_kelamin()
     	) {
+    		log.info("There has been changes in field that has to do with NIK, generating new NIK");
         	String[] tahunBulanHari = penduduk.getTanggal_lahir().split("-");
         	int tahun = (Integer.parseInt(tahunBulanHari[0]) % 1000) % 100;
         	int bulan = Integer.parseInt(tahunBulanHari[1]);
@@ -192,23 +233,25 @@ public class PageController {
     		String finalNik = prefix + String.format("%04d", localizedCount + 1);
     		
     		penduduk.setNik(finalNik);
+    		log.info("New NIK has been generated for Penduduk {} with new NIK {}", penduduk.getId(), finalNik);
     	}
     	
     	pendudukService.updatePenduduk(penduduk);
 
 		model.addAttribute("nik", nik);
-		model.addAttribute("penduduk", penduduk);
+		model.addAttribute("penduduk", penduduk);    	
+		log.info("SUC! POST Ubah Penduduk {} Success", penduduk.getId());
 		return "penduduk-edit-success";
 	}
 
 
     @RequestMapping(value = "/penduduk/mati/", method = RequestMethod.POST)
 	public String setPendudukWafat (Model model, @Valid @ModelAttribute PendudukModel penduduk, BindingResult result) {
-    	log.info("deleting penduduk {}", penduduk);
+    	log.info("Setting Penduduk {} status to Dead", penduduk.getId());
     	penduduk.setIs_wafat(1);
 
+    	log.info("Checking Keluarga Active Status");
 		KeluargaModel keluarga = keluargaService.selectKeluargaById(penduduk.getId_keluarga());
-		log.info("Keluarga {}", keluarga);
 		
 		List<PendudukModel> anggota = pendudukService.selectPendudukFromKeluarga(keluarga.getId());
 		log.info("Anggota {}", anggota);
@@ -224,14 +267,15 @@ public class PageController {
 		}
 		
 		if (isAllDead) {
-			log.info("all ded");
 			keluarga.setIs_tidak_berlaku(1);
+			log.info("Setting Keluarga {} Status to Inactive Because All Family Member has Died", keluarga.getId());
 			keluargaService.updateKeluarga(keluarga);
 		}
     	
     	pendudukService.updatePenduduk(penduduk);
 
 		model.addAttribute("penduduk", penduduk);
+		log.info("Penduduk {} Has been Set to Dead", penduduk.getId());
 		return "penduduk-nonaktifkan-sukses";
 	}
 
@@ -242,25 +286,31 @@ public class PageController {
 	) {
     	if (nkk != null) {
     		KeluargaModel keluarga = keluargaService.selectKeluarga(nkk);
-    		log.info("Keluarga {}", keluarga);
-    		model.addAttribute("keluarga", keluarga);
     		
-    		List<PendudukModel> anggota = pendudukService.selectPendudukFromKeluarga(keluarga.getId());
-    		log.info("Anggota {}", anggota);
-    		model.addAttribute("anggota", anggota);
-
-    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(keluarga.getId_kelurahan());
-    		model.addAttribute("kelurahan", kelurahan);
+    		if (keluarga != null) {
+    			log.info("Req: View Keluarga {}", keluarga.getId());
+	    		model.addAttribute("keluarga", keluarga);
+	    		
+	    		List<PendudukModel> anggota = pendudukService.selectPendudukFromKeluarga(keluarga.getId());
+	    		model.addAttribute("anggota", anggota);
+	
+	    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(keluarga.getId_kelurahan());
+	    		model.addAttribute("kelurahan", kelurahan);
+	    		
+	    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kelurahan.getId_kecamatan());
+	    		model.addAttribute("kecamatan", kecamatan);
+	    		
+	    		KotaModel kota = kotaService.selectKotaById(kecamatan.getId_kota());
+	    		model.addAttribute("kota", kota);
+	    		
+	    		return "keluarga-view";
+    		}
     		
-    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kelurahan.getId_kecamatan());
-    		model.addAttribute("kecamatan", kecamatan);
-    		
-    		KotaModel kota = kotaService.selectKotaById(kecamatan.getId_kota());
-    		model.addAttribute("kota", kota);
-    		
-    		return "keluarga-view";
+    		log.info("Err! Keluarga Not Found");
+    		return "error/keluarga-not-found";
     	}
 
+    	log.info("Req: Index Keluarga");
 		return "keluarga";
 	}
 
@@ -269,18 +319,30 @@ public class PageController {
     	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
     	model.addAttribute("daftarKelurahan", daftarKelurahan);
     	
+    	log.info("Req: Tambah Keluarga");
 		return "keluarga-add";
 	}
 
     @RequestMapping(value = "/keluarga/tambah", method = RequestMethod.POST)
 	public String tambahKeluargaSubmit (Model model, @Valid @ModelAttribute KeluargaModel keluarga, BindingResult result) {
+    	log.info("Req: POST Tambah Keluarga {}", keluarga);
+
     	if (result.hasErrors()) {
+    		log.info("ERR! POST Tambah Keluarga fail, validation error");
+    		List<ObjectError> resultErrors = result.getAllErrors();
+
+    		for (int i = 0; i < resultErrors.size(); i++) {
+    			model.addAttribute("error" + resultErrors.get(i).getCodes()[0].split("keluargaModel")[1].substring(1), resultErrors.get(i).getDefaultMessage());
+    		}
+    		
         	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
+        	model.addAttribute("keluarga", keluarga);
         	model.addAttribute("daftarKelurahan", daftarKelurahan);
     		return "keluarga-add";
     	}
     	
     	if (keluarga.getRt().length() != 3 || keluarga.getRw().length() != 3) {
+    		log.info("ERR! POST Tambah Keluarga fail, rt/rw error");
         	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
         	model.addAttribute("daftarKelurahan", daftarKelurahan);
     		return "keluarga-add";
@@ -306,6 +368,7 @@ public class PageController {
 		
 		keluargaService.addKeluarga(keluarga);
 		model.addAttribute("keluarga", keluarga);
+		log.info("SUC! POST Tambah Keluarga {} Success", keluarga.getId());
 		return "keluarga-add-success";
 	}
 
@@ -317,22 +380,31 @@ public class PageController {
         	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
         	model.addAttribute("daftarKelurahan", daftarKelurahan);
     		model.addAttribute("keluarga", keluarga);
+        	log.info("Req: Ubah Keluarga");
     		return "keluarga-edit";
     	}
-    	
-    	model.addAttribute("nkk", nkk);
+
+    	log.info("ERR! Keluarga Not Found");
 		return "keluarga-not-found";
 	}
 
 
     @RequestMapping(value = "/keluarga/ubah/{nkk}", method = RequestMethod.POST)
 	public String ubahKeluargaSubmit (Model model, @PathVariable(value = "nkk") String nkk, @Valid @ModelAttribute KeluargaModel keluarga, BindingResult result) {
+    	log.info("Req: POST Ubah Keluarga {}", keluarga.getId());
     	KeluargaModel original = keluargaService.selectKeluarga(nkk);
 
     	if (result.hasErrors()) {
+    		List<ObjectError> resultErrors = result.getAllErrors();
+
+    		for (int i = 0; i < resultErrors.size(); i++) {
+    			model.addAttribute("error" + resultErrors.get(i).getCodes()[0].split("keluargaModel")[1].substring(1), resultErrors.get(i).getDefaultMessage());
+    		}
+    		
         	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
         	model.addAttribute("daftarKelurahan", daftarKelurahan);
     		model.addAttribute("keluarga", keluarga);
+    		log.info("ERR! POST Ubah Keluarga Failed, validation error");
     		return "keluarga-edit";
     	}
     	
@@ -340,11 +412,12 @@ public class PageController {
         	List<KelurahanModel> daftarKelurahan = kelurahanService.selectAllKelurahan();
         	model.addAttribute("daftarKelurahan", daftarKelurahan);
     		model.addAttribute("keluarga", keluarga);
+    		log.info("ERR! POST Ubah Keluarga Failed, rt/rw error");
     		return "keluarga-edit";
     	}
 
     	if (keluarga.getId_kelurahan().compareTo(original.getId_kelurahan()) != 0) {
-    		log.info("is this stupid thing being called?");
+    		log.info("ID Kelurahan has been Changed, New NKK has to be generated and All Keluarga Member NIK has to be Updated");
     		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(keluarga.getId_kelurahan());
     		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kelurahan.getId_kecamatan());
     		
@@ -358,12 +431,13 @@ public class PageController {
     		String finalNkk = prefix + String.format("%04d", localizedCount + 1);
     		
     		keluarga.setNomor_kk(finalNkk);
+    		log.info("New NKK has been generated for Keluarga {} with new NKK {}", keluarga.getId(), finalNkk);
     		
     		List<PendudukModel> anggota = pendudukService.selectPendudukFromKeluarga(keluarga.getId());
     		
     		for (int i = 0; i < anggota.size(); i++) {
     			PendudukModel penduduk = anggota.get(i);
-    			log.info("penduduk iterated on {}", penduduk);
+        		log.info("Generating New NIK for Penduduk {} Because Penduduk Keluarga Has Changed its Kelurahan", penduduk.getId());
  
             	String[] tahunBulanHari = penduduk.getTanggal_lahir().split("-");
             	int tahun = (Integer.parseInt(tahunBulanHari[0]) % 1000) % 100;
@@ -383,6 +457,7 @@ public class PageController {
         		
         		penduduk.setNik(finalNik);
             	pendudukService.updatePenduduk(penduduk);
+        		log.info("New NIK has been generated for Penduduk {} with new NIK {}", penduduk.getId(), finalNik);
     		}
     	}
     	
@@ -390,6 +465,7 @@ public class PageController {
 
 		model.addAttribute("nkk", nkk);
 		model.addAttribute("keluarga", keluarga);
+		log.info("SUC! POST Ubah Keluarga {} Success", keluarga.getId());
 		return "keluarga-edit-success";
 	}
 
@@ -405,77 +481,119 @@ public class PageController {
     	model.addAttribute("listKota", listKota);
     	
     	if (kt != null) {
-    		model.addAttribute("kt", kt);
     		List<KecamatanModel> listKecamatan = kecamatanService.selectAllKecamatanByKotaId(kt);
-    		model.addAttribute("listKecamatan", listKecamatan);
+    		
+    		if (listKecamatan.size() > 0) {
+        		model.addAttribute("kt", kt);
+        		model.addAttribute("listKecamatan", listKecamatan);
+        		log.info("Kota {} has been provided by link parameter, containing List of Kecamatan {}", kt, listKecamatan);
+    		} else {
+    			log.info("Given Kota {} is not valid", kt);
+    			return "error/cari-not-found";
+    		}
     	}
     	
     	if (kc != null) {
-    		model.addAttribute("kc", kc);
     		List<KelurahanModel> listKelurahan = kelurahanService.selectAllKelurahanByKecamatanId(kc);
-    		model.addAttribute("listKelurahan", listKelurahan);
+    		
+    		if (listKelurahan.size() > 0) {
+        		model.addAttribute("kc", kc);
+        		model.addAttribute("listKelurahan", listKelurahan);
+        		log.info("Kecamatan {} has been provided by link parameter, containing List of Kelurahan {}", kc, listKelurahan);
+    		} else {
+    			log.info("Given Kecamatan {} is not valid", kc);
+    			return "error/cari-not-found";
+    		}
     	}
 
     	if (kt != null && kc != null && kl != null) {
     		KotaModel kota = kotaService.selectKotaById(kt);
-    		model.addAttribute("kota", kota);
-    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kc);
-    		model.addAttribute("kecamatan", kecamatan);
-    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(kl);
-    		model.addAttribute("kelurahan", kelurahan);
     		
-    		List<KeluargaModel> listKeluarga = keluargaService.selectAllKeluargaByKelurahanId(kl);
-    		
-    		List<PendudukModel> daftarPenduduk = new ArrayList<PendudukModel>();
-    		
-    		for (int i = 0; i < listKeluarga.size(); i++) {
-    			List<PendudukModel> anggotaKeluarga = pendudukService.selectPendudukFromKeluarga(listKeluarga.get(i).getId());
-    			daftarPenduduk.addAll(anggotaKeluarga);
+    		if (kota != null) {
+	    		KecamatanModel kecamatan = kecamatanService.selectKecamatanById(kc);
+	    		
+	    		if (kecamatan != null) {
+		    		KelurahanModel kelurahan = kelurahanService.selectKelurahanById(kl);
+		    		
+		    		if (kelurahan != null) {
+		    			if (
+		    				!kelurahan.getId_kecamatan().equals(kecamatan.getId()) ||
+		    				!kecamatan.getId_kota().equals(kota.getId())
+		    			) {
+		        			log.info("ERR! Given Combination of Kota {}, Kecamatan {}, and Kelurahan {} is not valid", kt, kc, kl);
+		    				return "error/cari-not-found";
+		    			}
+		    			
+		    			log.info("Req: Cari for Penduduk in Kelurahan {}, Kecamatan {}, Kota {}", kl, kc, kt);
+		        		model.addAttribute("kota", kota);
+			    		model.addAttribute("kecamatan", kecamatan);
+			    		model.addAttribute("kelurahan", kelurahan);
+			    		
+			    		List<KeluargaModel> listKeluarga = keluargaService.selectAllKeluargaByKelurahanId(kl);
+			    		
+			    		List<PendudukModel> daftarPenduduk = new ArrayList<PendudukModel>();
+			    		
+			    		for (int i = 0; i < listKeluarga.size(); i++) {
+			    			List<PendudukModel> anggotaKeluarga = pendudukService.selectPendudukFromKeluarga(listKeluarga.get(i).getId());
+			    			daftarPenduduk.addAll(anggotaKeluarga);
+			    		}
+			    		
+			    		PendudukModel youngest = null;
+			    		PendudukModel oldest = null;
+			    		
+			    		for (int i = 0; i < daftarPenduduk.size(); i++) {
+			    			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+			    			PendudukModel current = daftarPenduduk.get(i);
+			
+			    			if (youngest == null) {
+			    				youngest = daftarPenduduk.get(i);
+			    			} else {
+			    				Date youngestBirthDate = dateFormatter.parse(youngest.getTanggal_lahir());
+			    				Date currentBirthDate = dateFormatter.parse(current.getTanggal_lahir());
+			    				
+			    				if (youngestBirthDate.compareTo(currentBirthDate) < 0) {
+			    					youngest = current;
+			    				}
+			    			}
+			    			
+			    			if (oldest == null) {
+			    				oldest = daftarPenduduk.get(i);
+			    			} else {
+			    				Date oldestBirthDate = dateFormatter.parse(oldest.getTanggal_lahir());
+			    				Date currentBirthDate = dateFormatter.parse(current.getTanggal_lahir());
+			    				
+			    				if (oldestBirthDate.compareTo(currentBirthDate) > 0) {
+			    					oldest = current;
+			    				}
+			    			}
+			    		}
+			    		
+			    		if (youngest != null) {
+			    			model.addAttribute("youngest", youngest);
+			    		}
+			    		
+			    		if (oldest != null) {
+			    			model.addAttribute("oldest", oldest);
+			    		}
+			    		
+			    		model.addAttribute("daftarPenduduk", daftarPenduduk);
+			    		
+			    		log.info("SUC! Finished Querying Results for Penduduk in Kelurahan {}, Kecamatan {}, Kota {} successfully", kl, kc, kt);
+			    		return "cari-result";
+		    		} else {
+		    			log.info("ERR! Given Kelurahan {} is not valid", kl);
+		    		}
+	    		} else {
+	    			log.info("ERR! Given Kecamatan {} is not valid", kc);
+	    		}
+    		} else {
+    			log.info("ERR! Given Kota {} is not valid", kt);
     		}
     		
-    		PendudukModel youngest = null;
-    		PendudukModel oldest = null;
-    		
-    		for (int i = 0; i < daftarPenduduk.size(); i++) {
-    			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-    			PendudukModel current = daftarPenduduk.get(i);
-
-    			if (youngest == null) {
-    				youngest = daftarPenduduk.get(i);
-    			} else {
-    				Date youngestBirthDate = dateFormatter.parse(youngest.getTanggal_lahir());
-    				Date currentBirthDate = dateFormatter.parse(current.getTanggal_lahir());
-    				
-    				if (youngestBirthDate.compareTo(currentBirthDate) > 0) {
-    					youngest = current;
-    				}
-    			}
-    			
-    			if (oldest == null) {
-    				oldest = daftarPenduduk.get(i);
-    			} else {
-    				Date oldestBirthDate = dateFormatter.parse(oldest.getTanggal_lahir());
-    				Date currentBirthDate = dateFormatter.parse(current.getTanggal_lahir());
-    				
-    				if (oldestBirthDate.compareTo(currentBirthDate) < 0) {
-    					oldest = current;
-    				}
-    			}
-    		}
-    		
-    		if (youngest != null) {
-    			model.addAttribute("youngest", youngest);
-    		}
-    		
-    		if (oldest != null) {
-    			model.addAttribute("oldest", oldest);
-    		}
-    		
-    		model.addAttribute("daftarPenduduk", daftarPenduduk);
-    		
-    		return "cari-result";
+    		return "error/cari-not-found";
     	}
     	
+    	log.info("Req: Cari");    
 		return "cari";
 	}
 }

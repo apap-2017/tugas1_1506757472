@@ -44,14 +44,18 @@
       <input class="hidden" type="text" name="is_tidak_berlaku" readonly="true" th:field="*{is_tidak_berlaku}" th:value="${keluarga.is_tidak_berlaku}" />
       <label for="alamat">Alamat Keluarga</label>
       <input type="text" name="alamat" placeholder="Masukkan Alamat Keluarga" th:field="*{alamat}" th:value="${keluarga.alamat}" />
+      <h4 th:if="${erroralamat != null}" th:text="'Error: ' + ${erroralamat}">Alamat Error</h4>
       <label for="rt">RT:</label>
       <input type="number" name="rt" placeholder="Masukkan RT Alamat Keluarga" th:field="*{rt}" th:value="${keluarga.rt}" />
+      <h4 th:if="${errorrt != null}" th:text="'Error: ' + ${errorrt}">RT Error</h4>
       <label for="rw">RW:</label>
       <input type="number" name="rw" placeholder="Masukkan RW Alamat Keluarga" th:field="*{rw}" th:value="${keluarga.rw}" />
+      <h4 th:if="${errorrw != null}" th:text="'Error: ' + ${errorrw}">RW Error</h4>
       <label for="id_kelurahan">Kelurahan (Akan Otomatis Memilih Kecamatan &amp; Kota:</label>
       <select name="id_kelurahan" th:field="*{id_kelurahan}" th:value="${keluarga.id_kelurahan}">
         <option th:each="kelurahan,iterationStatus: ${daftarKelurahan}" th:value="${kelurahan.id}" th:text="${kelurahan.nama_kelurahan}">Nama Kelurahan</option>
       </select>
+      <h4 th:if="${errorid_kelurahan != null}" th:text="'Error: ' + ${errorid_kelurahan}">Kelurahan Error</h4>
       <button type="submit"><span class="icon-penduduk-add"></span> TAMBAH</button>
     </form>
   </div>

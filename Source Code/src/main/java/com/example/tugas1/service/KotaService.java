@@ -18,12 +18,12 @@ public class KotaService {
 	private KotaMapper kotaMapper;
 	
 	public KotaModel selectKotaById (BigInteger id) {
-		log.info("Select Kota with ID {}", id);
+		log.info("KotaService: Select Kota with ID {}", id);
 		return kotaMapper.selectKotaById(id);
 	}
 	
 	public List<KotaModel> selectAllKota () {
-		log.info("Select All Kota");
+		log.info("KotaService: Select All Kota");
 		return kotaMapper.selectAllKota();
 	}
 }

@@ -18,12 +18,12 @@ public class KecamatanService {
 	private KecamatanMapper kecamatanMapper;
 	
 	public KecamatanModel selectKecamatanById (BigInteger id) {
-		log.info("Select Kecamatan with ID {}", id);
+		log.info("KecamatanService: Select Kecamatan with ID {}", id);
 		return kecamatanMapper.selectKecamatanById(id);
 	}
 	
 	public List<KecamatanModel> selectAllKecamatanByKotaId (BigInteger id_kota) {
-		log.info("Select All Kecamatan from Kota with ID {}", id_kota);
+		log.info("KecamatanService: Select All Kecamatan from Kota with ID {}", id_kota);
 		return kecamatanMapper.selectAllKecamatanByKotaId(id_kota);
 	}
 }

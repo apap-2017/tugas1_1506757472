@@ -44,24 +44,31 @@
       <input class="hidden" type="text" name="is_wafat" readonly="true" th:field="*{is_wafat}" th:value="${penduduk.is_wafat}" />
       <label for="nama">Nama Lengkap:</label>
       <input type="text" name="nama" th:field="*{nama}" th:value="${penduduk.nama}" placeholder="Masukkan Nama Lengkap penduduk" />
+      <h4 th:if="${errornama != null}" th:text="'Error: ' + ${errornama}">Nama Error</h4>
       <label for="tempat_lahir">Tempat Lahir:</label>
       <input type="text" name="tempat_lahir" th:field="*{tempat_lahir}" th:value="${penduduk.tempat_lahir}" placeholder="Masukkan Tempat Lahir penduduk" />
+      <h4 th:if="${errortempat_lahir != null}" th:text="'Error: ' + ${errortempat_lahir}">Tempat Lahir Error</h4>
       <label for="tanggal_lahir">Tanggal Lahir:</label>
       <input type="date" name="tanggal_lahir" th:field="*{tanggal_lahir}" th:value="${penduduk.tanggal_lahir}" placeholder="Masukkan Tanggal Lahir penduduk" />
+      <h4 th:if="${errortanggal_lahir != null}" th:text="'Error: ' + ${errortanggal_lahir}">Tanggal Lahir Error</h4>
       <label for="jenis_kelamin">Jenis Kelamin:</label>
       <select name="jenis_kelamin" th:field="*{jenis_kelamin}" th:value="${penduduk.jenis_kelamin}">
         <option value="0">Laki Laki</option>
         <option value="1">Wanita</option>
       </select>
+      <h4 th:if="${errorjenis_kelamin != null}" th:text="'Error: ' + ${errorjenis_kelamin}">Jenis Kelamin Error</h4>
       <label for="is_wni">Seorang WNI:</label>
       <select name="is_wni" th:field="*{is_wni}" th:value="${penduduk.is_wni}">
         <option value="0">Tidak</option>
         <option value="1">Ya</option>
       </select>
+      <h4 th:if="${erroris_wni != null}" th:text="'Error: ' + ${erroris_wni}">Seorang WNI Error</h4>
       <label for="id_keluarga">ID Keluarga:</label>
       <input type="number" name="id_keluarga" th:field="*{id_keluarga}" th:value="${penduduk.id_keluarga}" placeholder="Masukkan ID Keluarga" />
+      <h4 th:if="${errorid_keluarga != null}" th:text="'Error: ' + ${errorid_keluarga}">ID Keluarga Error</h4>
       <label for="status_dalam_keluarga">Status Dalam Keluarga:</label>
       <input type="text" name="status_dalam_keluarga" th:field="*{status_dalam_keluarga}" th:value="${penduduk.status_dalam_keluarga}" placeholder="Masukkan Status Dalam Keluarga" />
+      <h4 th:if="${errorstatus_dalam_keluarga != null}" th:text="'Error: ' + ${errorstatus_dalam_keluarga}">Status Dalam Keluarga Error</h4>
       <label for="agama">Agama:</label>
       <select name="agama" th:field="*{agama}" th:value="${penduduk.agama}">
         <option value="Islam">Islam</option>
@@ -71,6 +78,7 @@
         <option value="Hindu">Hindu</option>
         <option value="Khonghucu">Khonghucu</option>
       </select>
+      <h4 th:if="${erroragama != null}" th:text="'Error: ' + ${erroragama}">Agama Error</h4>
       <label for="pekerjaan">Pekerjaan:</label>
       <select name="pekerjaan" th:field="*{pekerjaan}" th:value="${penduduk.pekerjaan}">
         <option value="BELUM / TIDAK BEKERJA">BELUM / TIDAK BEKERJA</option>
@@ -162,10 +170,13 @@
         <option value="BIARAWATI">BIARAWATI</option>
         <option value="WIRASWASTA">WIRASWASTA</option>
       </select>
+      <h4 th:if="${errorpekerjaan != null}" th:text="'Error: ' + ${errorpekerjaan}">Pekerjaan Error</h4>
       <label for="status_perkawinan">Status Perkawinan:</label>
       <input type="text" name="status_perkawinan" th:field="*{status_perkawinan}" th:value="${penduduk.status_perkawinan}" placeholder="Masukkan Status Kawin" />
+      <h4 th:if="${errorstatus_perkawinan != null}" th:text="'Error: ' + ${errorstatus_perkawinan}">Status Perkawinan Error</h4>
       <label for="golongan_darah">Golongan Darah:</label>
       <input type="text" name="golongan_darah" th:field="*{golongan_darah}" th:value="${penduduk.golongan_darah}" placeholder="Masukkan Golongan Darah" />
+      <h4 th:if="${errorgolongan_darah != null}" th:text="'Error: ' + ${errorgolongan_darah}">Golongan Darah Error</h4>
       <button type="submit"><span class="icon-penduduk"></span> UBAH</button>
     </form>
   </div>

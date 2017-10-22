@@ -19,37 +19,37 @@ public class PendudukService {
 	private PendudukMapper pendudukMapper;
 	
 	public PendudukModel selectPenduduk (String nik) {
-		log.info("Select Penduduk with NIK {}", nik);
+		log.info("PendudukService: Select Penduduk with NIK {}", nik);
 		return pendudukMapper.selectPenduduk(nik);
 	}
 	
 	public List<PendudukModel> selectPendudukFromKeluarga (BigInteger id_keluarga) {
-		log.info("Select Penduduk of Keluarga with NKK {}", id_keluarga);
+		log.info("PendudukService: Select Penduduk of Keluarga with ID {}", id_keluarga);
 		return pendudukMapper.selectPendudukFromKeluarga(id_keluarga);
 	}
 	
 	public BigInteger countAllPenduduk () {
-		log.info("counting all penduduk");
+		log.info("PendudukService: Counting all penduduk");
 		return pendudukMapper.countAllPenduduk();
 	}
 	
 	public int countCurrentPendudukOnQuery(String query) {
-		log.info("Count current number of penduduk with query {}", query);
+		log.info("PendudukService: Count current number of penduduk with query {}", query);
 		return pendudukMapper.countCurrentPendudukOnQuery(query);
 	}
 	
 	public void addPenduduk (PendudukModel penduduk) {
-		log.info("Add Penduduk {}", penduduk);
+		log.info("PendudukService: Add Penduduk {}", penduduk);
 		pendudukMapper.addPenduduk(penduduk);
 	}
 	
 	public void updatePenduduk (PendudukModel penduduk) {
-		log.info("Updating Penduduk {}", penduduk);
+		log.info("PendudukService: Updating Penduduk {}", penduduk);
 		pendudukMapper.updatePenduduk(penduduk);
 	}
 	
 	public void setPendudukWafat (BigInteger id) {
-		log.info("Set Penduduk with id {} to Wafat", id);
+		log.info("PendudukService: Set Penduduk with id {} to Wafat", id);
 		pendudukMapper.setPendudukWafat(id);
 	}
 }

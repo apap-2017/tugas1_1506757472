@@ -39,6 +39,28 @@
     </div>
     <h2>Hasil Pencarian</h2>
     <h1 th:text="'Semua Penduduk di ' + ${kelurahan.nama_kelurahan.toLowerCase()} + ', ' +  ${kecamatan.nama_kecamatan.toLowerCase()} + ', ' + ${kota.nama_kota.toLowerCase()}">Semua Penduduk di Kelurahan, Kecamatan, Kota</h1>
+    <div class="youngestOldest">
+      <div class="detail">
+        <h3>Penduduk Termuda</h3>
+        <h6>NIK:</h6>
+        <h4 th:text="${youngest.nik}">NIK</h4>
+        <h6>Nama:</h6>
+        <h4 th:text="${youngest.nama}">Nama</h4>
+        <h6>Tanggal Lahir:</h6>
+        <h4 th:text="${youngest.tanggal_lahir}">Tanggal Lahir</h4>
+        <a th:href="'/penduduk?nik=' + ${youngest.nik}" target="_blank">Lihat Data</a>
+      </div>
+      <div class="detail">
+        <h3>Penduduk Tertua</h3>
+        <h6>NIK:</h6>
+        <h4 th:text="${oldest.nik}">NIK</h4>
+        <h6>Nama:</h6>
+        <h4 th:text="${oldest.nama}">Nama</h4>
+        <h6>Tanggal Lahir:</h6>
+        <h4 th:text="${oldest.tanggal_lahir}">Tanggal Lahir</h4>
+        <a th:href="'/penduduk?nik=' + ${oldest.nik}" target="_blank">Lihat Data</a>
+      </div>
+    </div>
     <table id="pendudukList">
       <thead>
         <tr>

@@ -180,15 +180,23 @@ td {
   padding: 1rem;
 }
 
-td a {
+td a,
+.cari .youngestOldest .detail a {
   color: #FEFEFE;
   padding: 0.5rem 1rem;
   border: 0.1rem solid #FEFEFE;
   transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
 }
 
+.cari .youngestOldest .detail a {
+  display: inline-block;
+  margin: 1rem 0 0;
+}
+
 td a:hover,
-td a:focus {
+td a:focus,
+.cari .youngestOldest .detail a:hover,
+.cari .youngestOldest .detail a:focus {
   background: #FEFEFE;
   color: #333;
   transition: color 0.25s ease-in-out, background 0.25s ease-in-out;
@@ -327,6 +335,13 @@ td a:focus {
 .penduduk .inputAction h3 {
   font-size: 2rem;
   margin-bottom: 1rem;
+}
+
+.penduduk .inputAction h4 {
+  color: #AAAAAA;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: -0.5rem 0 1rem;
 }
 
 .penduduk .inputAction .selectContainer {
@@ -566,6 +581,46 @@ td a:focus {
   -webkit-text-fill-color: transparent;
 }
 
+.cari .youngestOldest {
+  width: calc(100% + 4rem);
+  margin: 0 -2rem 2rem;
+  padding: 2rem;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
+  color: #FAFAFA;
+  background: #21d4fd;
+  -webkit-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -moz-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  -o-background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+.cari .youngestOldest .detail {
+  width: 45%;
+}
+
+.cari .youngestOldest .detail h3 {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.cari .youngestOldest .detail h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cari .youngestOldest .detail h6 {
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
 .keluarga {
   display: flex;
   flex-wrap: wrap;
@@ -595,6 +650,13 @@ td a:focus {
 .keluarga .inputAction h3 {
   font-size: 2rem;
   margin-bottom: 1rem;
+}
+
+.keluarga .inputAction h4 {
+  color: #AAAAAA;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: -0.5rem 0 1rem;
 }
 
 .keluarga .inputAction.add input,
